@@ -1,0 +1,50 @@
+---
+- name: My Delegate
+  hosts: all
+  become: yes
+
+  vars:
+    mytext: "Привет от Евгения!"
+
+  tasks:
+    - name: Ping Test
+      ping: null
+
+    - name: Unregister Server from Load Balancer
+      shell: echo This server {{ inventory_hostname }} was deregistred from our Load Balancer, node name is {{ ansible_nodename }} >> /secret/log.txt
+      delegate_to: 127.0.0.1
+
+    - name: Update my Database
+      shell: echo UPDATING Database ......
+      run_once: true
+#      delegate_to: 127.0.0.1
+
+    - name: Create file11
+      copy:
+        dest: /secret/file11.txt
+        content: |
+          This is file N 11
+          On English Hello World, in file11
+          On Russian {{ mytext }}
+      delegate_to: ubuntuws1
+
+    - name: Create file12
+      copy:
+        dest: /secret/file12.txt
+        content: |
+          This is file N 12
+          On English Hello World, in file12
+          On Russian, {{ mytext }}
+
+    - name: Reboot my Servers
+      shell: sleep 3 && reboot now
+      async: 1
+      poll: 0
+
+    - name: Wait till my servers will come up online
+      wait_for: 
+        host: "{{ inventory_hostname }}"
+        state: started
+        delay: 5
+        timeout: 40
+      delegate_to: 127.0.0.1

@@ -1,0 +1,16 @@
+
+---
+
+- name: Install Default Apache Web Server
+  hosts: yum_servers
+  become: yes
+
+  tasks:
+
+  - name: Install Apache Web Server
+    yum: name=httpd state=installed
+
+  - name: Start Apache and Enable
+    service: name=httpd state=started enabled=yes
+
+...

@@ -1,0 +1,16 @@
+
+---
+
+- name: Install Default Apache Web Server
+  hosts: apt_servers
+  become: yes
+
+  tasks:
+
+  - name: Install Apache Web Server
+    apt: name=apache2 state=present
+
+  - name: Start Apache and Enable
+    service: name=apache2 state=started enabled=yes
+
+...

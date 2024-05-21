@@ -1,0 +1,14 @@
+---
+- name: My Includes
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Ping Test
+      ping: null
+
+    - name: Create Folders
+      include: playbook_folders.yml
+
+    - name: Create Files
+      include: playbook_files.yml mytext="Hello Evgeniy"

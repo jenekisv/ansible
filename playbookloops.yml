@@ -1,0 +1,33 @@
+
+---
+- name: Loops Playbook
+  hosts: debian1
+  become: yes
+
+  tasks:
+  - name: Say Hello to All
+    debug: msg="Hello {{ item }}"
+    loop: # with_items:
+        - "Vasya"
+        - "Petya"
+        - "Masha"
+        - "Olya"
+
+  - name: Loop Until Example
+    shell: echo -n Z >> myfile.txt && cat myfile.txt # добавить Z в файл и показать содержимое файла
+    register: output # сохранять результат в переменную output
+    delay: 2 # выполнять каждые 2 секунды
+    retries: 10 # повторять итерацию 10 раз
+    until: output.stdout.find("ZZZZ") == false # при достижении четырех Z в файле, прекратить выполнять итерации
+
+  - name: Print Final Output
+    debug:
+      var: output.stdout
+
+#  - name: Install Packaged # установка множества пакетов за раз
+#    yum: name={{ item }} state=installed
+#    loop: # with_items:
+#        - python
+#        - tree
+#        - mysql-client
+

@@ -1,0 +1,45 @@
+---
+- name: My Super Playbook
+  hosts: all
+  become: yes
+
+  vars:
+   message1: Privet
+   message2: World
+   secret: XCVBJOIJOIJOIJOIJOI
+
+  tasks:
+   - name: Print Secret Variable
+     debug:
+      var: secret
+
+   - name: Print Message with Secret
+     debug:
+      msg: "Secretnoe slovo {{ secret }}"
+
+   - name: Print Vladelcev Hostov
+     debug:
+      msg: "Vladelec etogo servera -->{{ owner }}<--"
+
+   - name: Ob'edinenie Peremennih
+     set_fact: full_message="{{ message1 }} {{ message2 }} from {{ owner }}"
+
+   - name: Print New Peremennoy
+     debug:
+      var: full_message
+
+   - name: Print Peremennoy ansible_destribution
+     debug:
+      var: ansible_distribution
+
+   - name: Sohranenie result v peremennoy and ego Print
+     shell: uptime
+     register: results
+
+   - name: Vivod Results
+     debug:
+      var: results
+
+   - name: Vivod konkretnogo Parametra
+     debug:
+      var: results.stdout
